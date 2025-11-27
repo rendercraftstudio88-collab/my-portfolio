@@ -1062,65 +1062,196 @@
         }
 
         /* ============================================
-           SKILLS SECTION
+           SKILLS SECTION - 3D KEYBOARD STYLE
            ============================================ */
         .skills {
             padding: 15vh 5vw;
-            background: var(--white);
-            color: var(--black);
+            background: var(--black);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
         }
 
         .skills-header {
             margin-bottom: 8vh;
+            text-align: center;
+            width: 100%;
         }
 
         .skills-title {
             font-family: 'Syne', sans-serif;
-            font-size: clamp(2rem, 5vw, 4rem);
+            font-size: clamp(2.5rem, 6vw, 5rem);
             font-weight: 800;
+            line-height: 1;
         }
 
-        .skills-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
+        .skills-title span {
+            -webkit-text-stroke: 1.5px var(--white);
+            color: transparent;
         }
 
-        .skill-pill {
-            padding: 1rem 2rem;
-            background: transparent;
-            border: 1px solid var(--black);
-            border-radius: 50px;
+        .skills-subtitle {
             font-size: 1rem;
-            font-weight: 500;
+            color: var(--gray);
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        /* 3D Keyboard Container */
+        .keyboard-base {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            transform: rotateX(55deg) rotateZ(-45deg);
+            transform-style: preserve-3d;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            box-shadow: -30px 30px 40px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Individual Key Design */
+        .key {
+            position: relative;
+            width: 90px;
+            height: 90px;
+            background: var(--key-bg);
+            border-radius: 12px;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            gap: 0.75rem;
-            transition: all 0.4s var(--transition);
-            cursor: default;
-            opacity: 1;
-            transform: scale(1);
+            text-decoration: none;
+            color: var(--key-text, white);
+            font-size: 32px;
+            transition: all 0.3s var(--transition);
+            cursor: pointer;
+            box-shadow: 
+                -10px 10px 0px var(--key-shadow),
+                -15px 15px 30px rgba(0,0,0,0.4);
         }
 
-        .skill-pill:hover {
-            background: var(--black);
-            color: var(--white);
-            transform: translateY(-5px);
+        .key i, .key svg, .key img {
+            transform: rotateZ(45deg);
+            filter: drop-shadow(0 0 5px rgba(0,0,0,0.3));
         }
 
-        .skill-pill i {
-            font-size: 1.2rem;
+        .key img {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
         }
-        
-        .skill-pill.animate {
+
+        .key-label {
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%) rotateZ(45deg);
+            font-family: 'Syne', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            white-space: nowrap;
             opacity: 0;
-            transform: scale(0);
+            transition: opacity 0.3s ease;
+            color: var(--white);
         }
-        
-        .skill-pill.animate.visible {
+
+        .key:hover {
+            transform: translate(0, -8px);
+            box-shadow: 
+                -15px 15px 0px var(--key-shadow),
+                -25px 25px 40px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .key:hover .key-label {
             opacity: 1;
-            transform: scale(1);
-            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .key:active {
+            transform: translate(-5px, 5px);
+            box-shadow: 
+                -5px 5px 0px var(--key-shadow),
+                -8px 8px 15px rgba(0,0,0,0.4);
+        }
+
+        /* Tool-Specific Colors */
+        .key.blender {
+            --key-bg: #f5792a;
+            --key-shadow: #c45d1b;
+        }
+
+        .key.houdini {
+            --key-bg: #ff4713;
+            --key-shadow: #c23000;
+        }
+
+        .key.unreal {
+            --key-bg: #313131;
+            --key-shadow: #1a1a1a;
+        }
+
+        .key.photoshop {
+            --key-bg: #31a8ff;
+            --key-shadow: #1e6fa8;
+        }
+
+        .key.aftereffects {
+            --key-bg: #9999ff;
+            --key-shadow: #6b6bb3;
+        }
+
+        .key.nuke {
+            --key-bg: #f9a825;
+            --key-shadow: #c68200;
+            --key-text: #000;
+        }
+
+        .key.embergen {
+            --key-bg: #ff6b35;
+            --key-shadow: #c44d20;
+        }
+
+        .key.davinci {
+            --key-bg: #e34a3d;
+            --key-shadow: #a82d22;
+        }
+
+        /* Custom SVG Icons for tools without FontAwesome icons */
+        .key .custom-icon {
+            font-family: 'Syne', sans-serif;
+            font-size: 18px;
+            font-weight: 800;
+            transform: rotateZ(45deg);
+            line-height: 1;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .keyboard-base {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+                padding: 20px;
+                transform: rotateX(55deg) rotateZ(-45deg) scale(0.8);
+            }
+            
+            .key {
+                width: 70px;
+                height: 70px;
+                font-size: 24px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .keyboard-base {
+                transform: rotateX(55deg) rotateZ(-45deg) scale(0.6);
+            }
         }
 
         /* ============================================
@@ -1571,7 +1702,112 @@
                 </div>
             </section>
 
-            <!-- Works Section (Grid Layout) -->
+            <!-- Gallery (Sticky Stack) -->
+            <section class="gallery" id="gallery">
+                <div class="gallery-header">
+                    <h2 class="gallery-title">VISUAL <span>GALLERY</span></h2>
+                    <p class="gallery-subtitle">Scroll to explore</p>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery1.jpeg')">
+                    <img src="Gallery1.jpeg" alt="Gallery 1">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Cinematic Shot</h3>
+                        <p class="gallery-item-cat">VFX Composition</p>
+                    </div>
+                    <div class="gallery-item-count">01 <span>/ 04</span></div>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery2.jpeg')">
+                    <img src="Gallery2.jpeg" alt="Gallery 2">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Environment</h3>
+                        <p class="gallery-item-cat">Unreal Engine 5</p>
+                    </div>
+                    <div class="gallery-item-count">02 <span>/ 04</span></div>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery3.jpeg')">
+                    <img src="Gallery3.jpeg" alt="Gallery 3">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Character Art</h3>
+                        <p class="gallery-item-cat">ZBrush Sculpt</p>
+                    </div>
+                    <div class="gallery-item-count">03 <span>/ 04</span></div>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery4.jpeg')">
+                    <img src="Gallery4.jpeg" alt="Gallery 4">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Lighting Study</h3>
+                        <p class="gallery-item-cat">Blender Cycles</p>
+                    </div>
+                    <div class="gallery-item-count">04 <span>/ 04</span></div>
+                </div>
+            </section>
+
+            <!-- Skills Section - 3D Keyboard Style -->
+            <section class="skills" id="skills">
+                <div class="skills-header">
+                    <h2 class="skills-title">Tools & <span>Technologies</span></h2>
+                    <p class="skills-subtitle">Click to explore</p>
+                </div>
+                <div class="keyboard-base">
+                    <!-- Blender -->
+                    <a href="https://www.blender.org" target="_blank" class="key blender">
+                        <svg viewBox="0 0 64 64" width="40" height="40" style="transform: rotateZ(45deg);">
+                            <path fill="white" d="M32.5 5.8c-2.1 0-4.2.3-6.2.9L9 21.5c-2.4 1.6-4.4 3.7-5.8 6.2-1.4 2.5-2.2 5.3-2.2 8.3 0 4.5 1.8 8.8 5 12 3.2 3.2 7.5 5 12 5h.5l16.8-10.8c4.2-.3 8.1-2.1 11-5 3.2-3.2 5-7.5 5-12s-1.8-8.8-5-12c-3.2-3.2-7.5-5-12-5h-.3l.5-3.4zM20.8 28c1.5 0 2.8.6 3.8 1.6s1.6 2.3 1.6 3.8-.6 2.8-1.6 3.8-2.3 1.6-3.8 1.6-2.8-.6-3.8-1.6-1.6-2.3-1.6-3.8.6-2.8 1.6-3.8 2.3-1.6 3.8-1.6zm17.5 0c3.7 0 7.2 1.5 9.8 4.1 2.6 2.6 4.1 6.1 4.1 9.8s-1.5 7.2-4.1 9.8c-2.6 2.6-6.1 4.1-9.8 4.1s-7.2-1.5-9.8-4.1c-2.6-2.6-4.1-6.1-4.1-9.8s1.5-7.2 4.1-9.8c2.6-2.6 6.1-4.1 9.8-4.1z"/>
+                        </svg>
+                        <span class="key-label">Blender</span>
+                    </a>
+
+                    <!-- Houdini -->
+                    <a href="https://www.sidefx.com" target="_blank" class="key houdini">
+                        <span class="custom-icon">H</span>
+                        <span class="key-label">Houdini</span>
+                    </a>
+
+                    <!-- Unreal Engine -->
+                    <a href="https://www.unrealengine.com" target="_blank" class="key unreal">
+                        <svg viewBox="0 0 24 24" width="40" height="40" style="transform: rotateZ(45deg);">
+                            <path fill="white" d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm0 1.5c5.79 0 10.5 4.71 10.5 10.5S17.79 22.5 12 22.5 1.5 17.79 1.5 12 6.21 1.5 12 1.5zM8.4 7.2v9.6l2.4-1.8V9.6L14.4 12l-3.6 2.7v2.1l6-4.5V9.6l-6-4.5v2.1L14.4 9.6 10.8 12V8.4z"/>
+                        </svg>
+                        <span class="key-label">Unreal Engine</span>
+                    </a>
+
+                    <!-- Photoshop -->
+                    <a href="https://www.adobe.com/products/photoshop.html" target="_blank" class="key photoshop">
+                        <span class="custom-icon">Ps</span>
+                        <span class="key-label">Photoshop</span>
+                    </a>
+
+                    <!-- After Effects -->
+                    <a href="https://www.adobe.com/products/aftereffects.html" target="_blank" class="key aftereffects">
+                        <span class="custom-icon">Ae</span>
+                        <span class="key-label">After Effects</span>
+                    </a>
+
+                    <!-- Nuke -->
+                    <a href="https://www.foundry.com/products/nuke-family/nuke" target="_blank" class="key nuke">
+                        <span class="custom-icon">Nk</span>
+                        <span class="key-label">Nuke</span>
+                    </a>
+
+                    <!-- EmberGen -->
+                    <a href="https://jangafx.com/software/embergen/" target="_blank" class="key embergen">
+                        <i class="fas fa-fire"></i>
+                        <span class="key-label">EmberGen</span>
+                    </a>
+
+                    <!-- DaVinci Resolve -->
+                    <a href="https://www.blackmagicdesign.com/products/davinciresolve" target="_blank" class="key davinci">
+                        <span class="custom-icon">DV</span>
+                        <span class="key-label">DaVinci Resolve</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Works Section (GRID LAYOUT) -->
             <section class="works" id="works">
                 <div class="works-header">
                     <h2 class="works-title">Selected <span>Works</span></h2>
@@ -1629,65 +1865,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
-
-            <!-- Gallery (Sticky Stack) -->
-            <section class="gallery" id="gallery">
-                <div class="gallery-header">
-                    <h2 class="gallery-title">VISUAL <span>GALLERY</span></h2>
-                    <p class="gallery-subtitle">Scroll to explore</p>
-                </div>
-                <div class="gallery-item" onclick="openModal('Gallery1.jpeg')">
-                    <img src="Gallery1.jpeg" alt="Gallery 1">
-                    <div class="gallery-item-overlay"></div>
-                    <div class="gallery-item-info">
-                        <h3 class="gallery-item-title">Cinematic Shot</h3>
-                        <p class="gallery-item-cat">VFX Composition</p>
-                    </div>
-                    <div class="gallery-item-count">01 <span>/ 04</span></div>
-                </div>
-                <div class="gallery-item" onclick="openModal('Gallery2.jpeg')">
-                    <img src="Gallery2.jpeg" alt="Gallery 2">
-                    <div class="gallery-item-overlay"></div>
-                    <div class="gallery-item-info">
-                        <h3 class="gallery-item-title">Environment</h3>
-                        <p class="gallery-item-cat">Unreal Engine 5</p>
-                    </div>
-                    <div class="gallery-item-count">02 <span>/ 04</span></div>
-                </div>
-                <div class="gallery-item" onclick="openModal('Gallery3.jpeg')">
-                    <img src="Gallery3.jpeg" alt="Gallery 3">
-                    <div class="gallery-item-overlay"></div>
-                    <div class="gallery-item-info">
-                        <h3 class="gallery-item-title">Character Art</h3>
-                        <p class="gallery-item-cat">ZBrush Sculpt</p>
-                    </div>
-                    <div class="gallery-item-count">03 <span>/ 04</span></div>
-                </div>
-                <div class="gallery-item" onclick="openModal('Gallery4.jpeg')">
-                    <img src="Gallery4.jpeg" alt="Gallery 4">
-                    <div class="gallery-item-overlay"></div>
-                    <div class="gallery-item-info">
-                        <h3 class="gallery-item-title">Lighting Study</h3>
-                        <p class="gallery-item-cat">Blender Cycles</p>
-                    </div>
-                    <div class="gallery-item-count">04 <span>/ 04</span></div>
-                </div>
-            </section>
-
-            <!-- Skills Section -->
-            <section class="skills" id="skills">
-                <div class="skills-header">
-                    <h2 class="skills-title">Tools & Technologies</h2>
-                </div>
-                <div class="skills-grid">
-                    <div class="skill-pill"><i class="fas fa-cube"></i> Blender</div>
-                    <div class="skill-pill"><i class="fas fa-fire"></i> Houdini</div>
-                    <div class="skill-pill"><i class="fas fa-gamepad"></i> Unreal Engine</div>
-                    <div class="skill-pill"><i class="fas fa-magic"></i> Photoshop</div>
-                    <div class="skill-pill"><i class="fas fa-burn"></i> EmberGen</div>
-                    <div class="skill-pill"><i class="fas fa-water"></i> LiquiGen</div>
                 </div>
             </section>
 
