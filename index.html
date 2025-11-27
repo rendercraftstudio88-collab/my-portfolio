@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ARUN JOSHI — 3D Artist & VFX Specialist</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollToPlugin.min.js"></script>
+    
+    <style>
+        /* ============================================
+           CSS VARIABLES
+           ============================================ */
+        :root {
+            --black: #0a0a0a;
+            --white: #f5f5f5;
+            --gray: #888;
+            --accent: #ff4d00;
+            --transition: cubic-bezier(0.76, 0, 0.24, 1);
+        }
+
+        /* ============================================
+           RESET & BASE
+           ============================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+        }
+
+        html.lenis {
+            height: auto;
+        }
+
+        .lenis.lenis-smooth {
+            scroll-behavior: auto;
+        }
+
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        img {
+            max-width: 100%;
+            display: block;
+        }
+
+        /* ============================================
+           SMOOTH SCROLL WRAPPER
+           ============================================ */
+        #smooth-wrapper {
+            overflow: hidden;
+        }
+
+        #smooth-content {
+            will-change: transform;
+        }
+
+        /* ============================================
+           CUSTOM CURSOR
+           ============================================ */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--white);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.15s var(--transition), 
+                        width 0.4s var(--transition), 
+                        height 0.4s var(--transition);
+        }
+
+        .cursor.active {
+            width: 80px;
+            height: 80px;
+            border-width: 2px;
+        }
+
+        .cursor.accent {
+            background: var(--accent);
+            border-color: var(--accent);
+            mix-blend-mode: normal;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--white);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+        }
+
+        /* ============================================
+           PRELOADER
+           ============================================ */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--black);
+            z-index: 10000;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 5vw;
+        }
+
+        .preloader-text {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 15vw, 12rem);
+            font-weight: 800;
+            line-height: 0.85;
+            overflow: hidden;
+        }
+
+        .preloader-text span {
+            display: block;
+            transform: translateY(100%);
+        }
+
+        .preloader-counter {
+            position: absolute;
+            top: 5vw;
+            right: 5vw;
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1rem, 3vw, 2rem);
+            font-weight: 500;
+        }
+
+        .preloader-line {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: var(--white);
+        }
+
+        /* ============================================
+           NAVIGATION
+           ============================================ */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 2rem 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .nav-logo {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+        }
+
+        .nav-link {
+            font-size: 0.9rem;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link span {
+            display: block;
+            transition: transform 0.4s var(--transition);
+        }
+
+        .nav-link::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 100%;
+            left: 0;
+            transition: transform 0.4s var(--transition);
+        }
+
+        .nav-link:hover span {
+            transform: translateY(-100%);
+        }
+
+        .nav-link:hover::after {
+            transform: translateY(-100%);
+        }
+
+        .nav-menu {
+            display: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0 5vw 10vh;
+            position: relative;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .hero-bg iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            transform: scale(1.2);
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, 
+                var(--black) 0%, 
+                rgba(10,10,10,0.5) 50%,
+                rgba(10,10,10,0.3) 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 12vw, 11rem);
+            font-weight: 800;
+            line-height: 0.9;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title .line {
+            display: block;
+            overflow: hidden;
+        }
+
+        .hero-title .line span {
+            display: block;
+            transform: translateY(100%);
+        }
+
+        .hero-title .outline {
+            -webkit-text-stroke: 1.5px var(--white);
+            color: transparent;
+        }
+
+        .hero-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .hero-info p {
+            font-size: 1rem;
+            color: var(--gray);
+            max-width: 400px;
+            line-height: 1.6;
+        }
+
+        .hero-scroll {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .hero-scroll-line {
+            width: 60px;
+            height: 1px;
+            background: var(--white);
+            transform-origin: left;
+        }
+
+        /* ============================================
+           MARQUEE
+           ============================================ */
+        .marquee {
+            padding: 2rem 0;
+            background: var(--white);
+            color: var(--black);
+            overflow: hidden;
+        }
+
+        .marquee-track {
+            display: flex;
+            animation: marquee 30s linear infinite;
+        }
+
+        .marquee-content {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            padding: 0 2rem;
+            flex-shrink: 0;
+        }
+
+        .marquee-item {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            font-weight: 700;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+        }
+
+        .marquee-item::after {
+            content: '✦';
+            font-size: 1rem;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+        .about {
+            padding: 15vh 5vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5vw;
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+            aspect-ratio: 3/4;
+            overflow: hidden;
+            border-radius: 10px;
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: scale(1.3);
+            transition: transform 1.5s var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: scale(1);
+        }
+
+        .about-image-overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--black);
+            transform-origin: top;
+        }
+
+        .about-content {
+            padding: 5vh 0;
+        }
+
+        .section-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--gray);
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-label::before {
+            content: '';
+            width: 30px;
+            height: 1px;
+            background: var(--gray);
+        }
+
+        .about-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 2rem;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+
+        .about-stats {
+            display: flex;
+            gap: 4rem;
+        }
+
+        .stat {
+            text-align: left;
+        }
+
+        .stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        /* ============================================
+           SERVICES SECTION
+           ============================================ */
+        .services {
+            padding: 15vh 5vw;
+        }
+
+        .services-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 8vh;
+        }
+
+        .services-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .services-title span {
+            -webkit-text-stroke: 1.5px var(--white);
+            color: transparent;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            transition: all 0.5s var(--transition);
+            position: relative;
+            overflow: hidden;
+            opacity: 1;
+        }
+        
+        .service-card.animate {
+            opacity: 0;
+            transform: translateY(100px);
+        }
+        
+        .service-card.animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent), transparent);
+            opacity: 0;
+            transition: opacity 0.5s var(--transition);
+        }
+
+        .service-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-10px);
+        }
+
+        .service-card:hover::before {
+            opacity: 0.1;
+        }
+
+        .service-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 4rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.05);
+            position: absolute;
+            top: 1rem;
+            right: 2rem;
+        }
+
+        .service-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent);
+        }
+
+        .service-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .service-desc {
+            font-size: 1rem;
+            color: var(--gray);
+            line-height: 1.6;
+        }
+
+        /* ============================================
+           WORKS SECTION (GRID LAYOUT)
+           ============================================ */
+        .works {
+            padding: 10vh 5vw 15vh;
+        }
+
+        .works-header {
+            margin-bottom: 5vh;
+        }
+
+        .works-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .works-title span {
+            -webkit-text-stroke: 1.5px var(--white);
+            color: transparent;
+        }
+
+        .works-container {
+            overflow: visible;
+        }
+
+        .works-track {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .work-item {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .work-image {
+            aspect-ratio: 16/10;
+            overflow: hidden;
+            border-radius: 15px;
+            position: relative;
+        }
+
+        .work-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s var(--transition);
+        }
+
+        .work-item:hover .work-image img {
+            transform: scale(1.1);
+        }
+
+        .work-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            opacity: 0;
+            transition: opacity 0.5s var(--transition);
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem;
+        }
+
+        .work-item:hover .work-overlay {
+            opacity: 1;
+        }
+
+        .work-info {
+            margin-top: 1.5rem;
+        }
+
+        .work-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .work-category {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ============================================
+           GALLERY (STICKY STACK)
+           ============================================ */
+        .gallery {
+            position: relative;
+        }
+
+        .gallery-header {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--black);
+        }
+
+        .gallery-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(3rem, 12vw, 10rem);
+            font-weight: 800;
+            text-align: center;
+            line-height: 1;
+        }
+
+        .gallery-title span {
+            -webkit-text-stroke: 1.5px var(--white);
+            color: transparent;
+        }
+
+        .gallery-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-top: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+        }
+
+        .gallery-item {
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .gallery-item-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.5s var(--transition);
+        }
+
+        .gallery-item:hover .gallery-item-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item-info {
+            position: absolute;
+            bottom: 5vh;
+            left: 5vw;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.5s var(--transition);
+        }
+
+        .gallery-item:hover .gallery-item-info {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .gallery-item-title {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .gallery-item-cat {
+            font-size: 0.9rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        .gallery-item-count {
+            position: absolute;
+            top: 5vh;
+            right: 5vw;
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .gallery-item-count span {
+            color: var(--gray);
+        }
+
+        /* ============================================
+           SKILLS SECTION
+           ============================================ */
+        .skills {
+            padding: 15vh 5vw;
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .skills-header {
+            margin-bottom: 8vh;
+        }
+
+        .skills-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 800;
+        }
+
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .skill-pill {
+            padding: 1rem 2rem;
+            background: transparent;
+            border: 1px solid var(--black);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.4s var(--transition);
+            cursor: default;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .skill-pill:hover {
+            background: var(--black);
+            color: var(--white);
+            transform: translateY(-5px);
+        }
+
+        .skill-pill i {
+            font-size: 1.2rem;
+        }
+        
+        .skill-pill.animate {
+            opacity: 0;
+            transform: scale(0);
+        }
+        
+        .skill-pill.animate.visible {
+            opacity: 1;
+            transform: scale(1);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        /* ============================================
+           CONTACT SECTION
+           ============================================ */
+        .contact {
+            padding: 20vh 5vw;
+            text-align: center;
+        }
+
+        .contact-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+
+        .contact-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 7rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 4rem;
+        }
+
+        .contact-title a {
+            position: relative;
+            display: inline-block;
+        }
+
+        .contact-title a::after {
+            content: '';
+            position: absolute;
+            bottom: 0.1em;
+            left: 0;
+            width: 100%;
+            height: 0.05em;
+            background: var(--white);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.5s var(--transition);
+        }
+
+        .contact-title a:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1rem;
+            padding: 1rem 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50px;
+            transition: all 0.4s var(--transition);
+        }
+
+        .contact-link:hover {
+            background: var(--white);
+            color: var(--black);
+            transform: translateY(-5px);
+        }
+
+        .contact-link i {
+            font-size: 1.2rem;
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            padding: 3rem 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .footer-left {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .footer-right a {
+            font-size: 0.9rem;
+            color: var(--gray);
+            transition: color 0.3s ease;
+        }
+
+        .footer-right a:hover {
+            color: var(--white);
+        }
+
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.95);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s var(--transition);
+            cursor: none;
+        }
+
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            transform: scale(0.9);
+            transition: transform 0.4s var(--transition);
+        }
+
+        .modal.active img {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .modal-close:hover {
+            transform: rotate(90deg);
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
+        @media (max-width: 1024px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about {
+                grid-template-columns: 1fr;
+                gap: 5vh;
+            }
+
+            .work-item {
+                width: 70vw;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .nav-menu {
+                display: block;
+            }
+
+            .hero-bottom {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 2rem;
+            }
+
+            .about-stats {
+                flex-wrap: wrap;
+                gap: 2rem;
+            }
+
+            .work-item {
+                width: 85vw;
+            }
+
+            .cursor, .cursor-follower {
+                display: none;
+            }
+
+            body {
+                cursor: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .gallery-title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <!-- Preloader -->
+    <div class="preloader">
+        <div class="preloader-counter"><span class="counter">0</span>%</div>
+        <div class="preloader-text">
+            <span>ARUN</span>
+        </div>
+        <div class="preloader-text">
+            <span>JOSHI</span>
+        </div>
+        <div class="preloader-line"></div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <span class="modal-close"><i class="fas fa-times"></i></span>
+        <img src="" alt="" id="modalImg">
+    </div>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="#" class="nav-logo">ARUN JOSHI</a>
+        <div class="nav-links">
+            <a href="#about" class="nav-link" data-text="About"><span>About</span></a>
+            <a href="#services" class="nav-link" data-text="Services"><span>Services</span></a>
+            <a href="#works" class="nav-link" data-text="Works"><span>Works</span></a>
+            <a href="#gallery" class="nav-link" data-text="Gallery"><span>Gallery</span></a>
+            <a href="#contact" class="nav-link" data-text="Contact"><span>Contact</span></a>
+        </div>
+        <div class="nav-menu">Menu</div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="smooth-wrapper">
+        <div id="smooth-content">
+
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-bg">
+                    <iframe src='https://my.spline.design/interactivesparkletterwithparticleeffect-r6PcFWFKJLmVaADolyy74yYF/' loading="lazy"></iframe>
+                    <div class="hero-overlay"></div>
+                </div>
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="line"><span>CREATIVE</span></span>
+                        <span class="line"><span class="outline">DIGITAL</span></span>
+                        <span class="line"><span>ARTIST</span></span>
+                    </h1>
+                    <div class="hero-bottom">
+                        <div class="hero-info">
+                            <p>A passionate 3D Artist & VFX Specialist based in Nepal, crafting immersive visual experiences through cutting-edge digital artistry.</p>
+                        </div>
+                        <div class="hero-scroll">
+                            <span>Scroll to explore</span>
+                            <div class="hero-scroll-line"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Marquee -->
+            <div class="marquee">
+                <div class="marquee-track">
+                    <div class="marquee-content">
+                        <span class="marquee-item">3D MODELING</span>
+                        <span class="marquee-item">VFX COMPOSITING</span>
+                        <span class="marquee-item">PRODUCT VISUALIZATION</span>
+                        <span class="marquee-item">MOTION DESIGN</span>
+                        <span class="marquee-item">PHOTO MANIPULATION</span>
+                    </div>
+                    <div class="marquee-content">
+                        <span class="marquee-item">3D MODELING</span>
+                        <span class="marquee-item">VFX COMPOSITING</span>
+                        <span class="marquee-item">PRODUCT VISUALIZATION</span>
+                        <span class="marquee-item">MOTION DESIGN</span>
+                        <span class="marquee-item">PHOTO MANIPULATION</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <section class="about" id="about">
+                <div class="about-image">
+                    <img src="profile.jpg" alt="Arun Joshi">
+                    <div class="about-image-overlay"></div>
+                </div>
+                <div class="about-content">
+                    <span class="section-label">About Me</span>
+                    <h2 class="about-title">I create digital experiences that captivate and inspire.</h2>
+                    <p class="about-text">
+                        A passionate 3D Artist and VFX Specialist with expertise in creating stunning visual experiences. Specializing in product visualization, motion graphics, and high-end compositing. I transform creative visions into breathtaking digital reality using cutting-edge tools like Blender, Houdini, Nuke, and Unreal Engine.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <div class="stat-number">50+</div>
+                            <div class="stat-label">Projects</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">3+</div>
+                            <div class="stat-label">Years Exp</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-number">7</div>
+                            <div class="stat-label">Softwares</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Section -->
+            <section class="services" id="services">
+                <div class="services-header">
+                    <h2 class="services-title">What I <span>Do</span></h2>
+                </div>
+                <div class="services-grid">
+                    <div class="service-card">
+                        <span class="service-number">01</span>
+                        <div class="service-icon"><i class="fas fa-cube"></i></div>
+                        <h3 class="service-title">Product Visualization</h3>
+                        <p class="service-desc">Creating stunning 3D product renders with photorealistic quality for advertising and e-commerce.</p>
+                    </div>
+                    <div class="service-card">
+                        <span class="service-number">02</span>
+                        <div class="service-icon"><i class="fas fa-film"></i></div>
+                        <h3 class="service-title">VFX Compositing</h3>
+                        <p class="service-desc">Seamlessly blending CGI with live-action footage to create breathtaking visual effects.</p>
+                    </div>
+                    <div class="service-card">
+                        <span class="service-number">03</span>
+                        <div class="service-icon"><i class="fas fa-wand-magic-sparkles"></i></div>
+                        <h3 class="service-title">Photo Manipulation</h3>
+                        <p class="service-desc">Transforming images into visual masterpieces through advanced digital manipulation.</p>
+                    </div>
+                    <div class="service-card">
+                        <span class="service-number">04</span>
+                        <div class="service-icon"><i class="fas fa-mountain-sun"></i></div>
+                        <h3 class="service-title">3D Environments</h3>
+                        <p class="service-desc">Building immersive worlds for games, films, and architectural visualization.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Works Section (Horizontal Scroll) -->
+            <section class="works" id="works">
+                <div class="works-header">
+                    <h2 class="works-title">Selected <span>Works</span></h2>
+                </div>
+                <div class="works-container">
+                    <div class="works-track">
+                        <div class="work-item" onclick="openModal('sauvage final.png')">
+                            <div class="work-image">
+                                <img src="sauvage final.png" alt="Sauvage Dior">
+                                <div class="work-overlay"></div>
+                            </div>
+                            <div class="work-info">
+                                <h3 class="work-title">Sauvage Dior</h3>
+                                <span class="work-category">Product Visualization</span>
+                            </div>
+                        </div>
+                        <div class="work-item" onclick="openModal('seven1.png')">
+                            <div class="work-image">
+                                <img src="seven1.png" alt="Seven">
+                                <div class="work-overlay"></div>
+                            </div>
+                            <div class="work-info">
+                                <h3 class="work-title">Seven</h3>
+                                <span class="work-category">Advertising</span>
+                            </div>
+                        </div>
+                        <div class="work-item" onclick="openModal('sweetness.png')">
+                            <div class="work-image">
+                                <img src="sweetness.png" alt="Sweetness">
+                                <div class="work-overlay"></div>
+                            </div>
+                            <div class="work-info">
+                                <h3 class="work-title">Sweetness</h3>
+                                <span class="work-category">Abstract Art</span>
+                            </div>
+                        </div>
+                        <div class="work-item" onclick="openModal('valentino1.png')">
+                            <div class="work-image">
+                                <img src="valentino1.png" alt="Valentino">
+                                <div class="work-overlay"></div>
+                            </div>
+                            <div class="work-info">
+                                <h3 class="work-title">Valentino</h3>
+                                <span class="work-category">Luxury Goods</span>
+                            </div>
+                        </div>
+                        <div class="work-item" onclick="openModal('vanila chloe.png')">
+                            <div class="work-image">
+                                <img src="vanila chloe.png" alt="Vanilla Chloe">
+                                <div class="work-overlay"></div>
+                            </div>
+                            <div class="work-info">
+                                <h3 class="work-title">Vanilla Chloe</h3>
+                                <span class="work-category">Fragrance</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Gallery (Sticky Stack) -->
+            <section class="gallery" id="gallery">
+                <div class="gallery-header">
+                    <h2 class="gallery-title">VISUAL <span>GALLERY</span></h2>
+                    <p class="gallery-subtitle">Scroll to explore</p>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery1.jpeg')">
+                    <img src="Gallery1.jpeg" alt="Gallery 1">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Cinematic Shot</h3>
+                        <p class="gallery-item-cat">VFX Composition</p>
+                    </div>
+                    <div class="gallery-item-count">01 <span>/ 04</span></div>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery2.jpeg')">
+                    <img src="Gallery2.jpeg" alt="Gallery 2">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Environment</h3>
+                        <p class="gallery-item-cat">Unreal Engine 5</p>
+                    </div>
+                    <div class="gallery-item-count">02 <span>/ 04</span></div>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery3.jpeg')">
+                    <img src="Gallery3.jpeg" alt="Gallery 3">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Character Art</h3>
+                        <p class="gallery-item-cat">ZBrush Sculpt</p>
+                    </div>
+                    <div class="gallery-item-count">03 <span>/ 04</span></div>
+                </div>
+                <div class="gallery-item" onclick="openModal('Gallery4.jpeg')">
+                    <img src="Gallery4.jpeg" alt="Gallery 4">
+                    <div class="gallery-item-overlay"></div>
+                    <div class="gallery-item-info">
+                        <h3 class="gallery-item-title">Lighting Study</h3>
+                        <p class="gallery-item-cat">Blender Cycles</p>
+                    </div>
+                    <div class="gallery-item-count">04 <span>/ 04</span></div>
+                </div>
+            </section>
+
+            <!-- Skills Section -->
+            <section class="skills" id="skills">
+                <div class="skills-header">
+                    <h2 class="skills-title">Tools & Technologies</h2>
+                </div>
+                <div class="skills-grid">
+                    <div class="skill-pill"><i class="fas fa-cube"></i> Blender</div>
+                    <div class="skill-pill"><i class="fas fa-fire"></i> Houdini</div>
+                    <div class="skill-pill"><i class="fas fa-gamepad"></i> Unreal Engine</div>
+                    <div class="skill-pill"><i class="fas fa-magic"></i> Photoshop</div>
+                    <div class="skill-pill"><i class="fas fa-burn"></i> EmberGen</div>
+                    <div class="skill-pill"><i class="fas fa-water"></i> LiquiGen</div>
+                </div>
+            </section>
+
+            <!-- Contact Section -->
+            <section class="contact" id="contact">
+                <span class="contact-label">Get in Touch</span>
+                <h2 class="contact-title">
+                    Let's create something<br>
+                    <a href="mailto:joshiarun241@gmail.com">amazing together</a>
+                </h2>
+                <div class="contact-links">
+                    <a href="mailto:joshiarun241@gmail.com" class="contact-link">
+                        <i class="fas fa-envelope"></i>
+                        <span>Email Me</span>
+                    </a>
+                    <a href="https://www.linkedin.com/in/arun-joshi-2b6476237/" target="_blank" class="contact-link">
+                        <i class="fab fa-linkedin-in"></i>
+                        <span>LinkedIn</span>
+                    </a>
+                    <a href="https://www.instagram.com/ai_graphic.designer/" target="_blank" class="contact-link">
+                        <i class="fab fa-instagram"></i>
+                        <span>Instagram</span>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <footer class="footer">
+                <div class="footer-left">© 2024 Arun Joshi. All rights reserved.</div>
+                <div class="footer-right">
+                    <a href="#top">Back to Top</a>
+                </div>
+            </footer>
+
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // GSAP REGISTER PLUGINS
+        // ============================================
+        gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+        // ============================================
+        // WAIT FOR DOM TO BE READY
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // ============================================
+            // CUSTOM CURSOR
+            // ============================================
+            const cursor = document.querySelector('.cursor');
+            const follower = document.querySelector('.cursor-follower');
+            let mouseX = 0, mouseY = 0;
+            let cursorX = 0, cursorY = 0;
+            let followerX = 0, followerY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+            });
+
+            gsap.ticker.add(() => {
+                cursorX += (mouseX - cursorX) * 0.2;
+                cursorY += (mouseY - cursorY) * 0.2;
+                followerX += (mouseX - followerX) * 0.1;
+                followerY += (mouseY - followerY) * 0.1;
+
+                gsap.set(cursor, { x: cursorX, y: cursorY, xPercent: -50, yPercent: -50 });
+                gsap.set(follower, { x: followerX, y: followerY, xPercent: -50, yPercent: -50 });
+            });
+
+            // Cursor hover effects
+            const hoverElements = document.querySelectorAll('a, button, .service-card, .work-item, .gallery-item, .skill-pill');
+            hoverElements.forEach(el => {
+                el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+                el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+            });
+
+            // ============================================
+            // PRELOADER
+            // ============================================
+            const preloader = document.querySelector('.preloader');
+            const preloaderLine = document.querySelector('.preloader-line');
+            const preloaderTexts = document.querySelectorAll('.preloader-text span');
+            const counterEl = document.querySelector('.counter');
+            
+            let count = 0;
+            
+            // Animate preloader text in immediately
+            gsap.to(preloaderTexts, {
+                y: 0,
+                duration: 1,
+                stagger: 0.1,
+                ease: "power3.out",
+                delay: 0.2
+            });
+
+            // Counter animation function
+            function animateCounter() {
+                count += Math.floor(Math.random() * 8) + 3;
+                if (count >= 100) {
+                    count = 100;
+                    counterEl.textContent = count;
+                    preloaderLine.style.width = count + '%';
+                    
+                    // Complete loading
+                    setTimeout(() => {
+                        // Animate text out
+                        gsap.to(preloaderTexts, {
+                            y: -150,
+                            duration: 0.8,
+                            stagger: 0.05,
+                            ease: "power3.in"
+                        });
+                        
+                        // Slide preloader up
+                        gsap.to(preloader, {
+                            yPercent: -100,
+                            duration: 1,
+                            delay: 0.5,
+                            ease: "power4.inOut",
+                            onComplete: () => {
+                                preloader.style.display = 'none';
+                                initPageAnimations();
+                            }
+                        });
+                    }, 400);
+                } else {
+                    counterEl.textContent = count;
+                    preloaderLine.style.width = count + '%';
+                    setTimeout(animateCounter, 40);
+                }
+            }
+            
+            // Start counter after a brief delay
+            setTimeout(animateCounter, 300);
+
+        // ============================================
+        // PAGE ANIMATIONS
+        // ============================================
+        function initPageAnimations() {
+            // Hero title animation
+            gsap.to('.hero-title .line span', {
+                y: 0,
+                duration: 1.2,
+                stagger: 0.1,
+                ease: "power4.out"
+            });
+
+            // Hero bottom fade in
+            gsap.from('.hero-bottom', {
+                opacity: 0,
+                y: 50,
+                duration: 1,
+                delay: 0.8,
+                ease: "power3.out"
+            });
+
+            // Scroll line animation
+            gsap.to('.hero-scroll-line', {
+                scaleX: 1,
+                duration: 1.5,
+                delay: 1.2,
+                ease: "power2.out"
+            });
+        }
+
+        // ============================================
+        // SCROLL ANIMATIONS
+        // ============================================
+        
+        // About section
+        gsap.to('.about-image-overlay', {
+            scaleY: 0,
+            scrollTrigger: {
+                trigger: '.about',
+                start: 'top 80%',
+                end: 'top 20%',
+                scrub: 1
+            }
+        });
+
+        // Service cards - using ScrollTrigger batch for reliable animation
+        ScrollTrigger.batch('.service-card', {
+            onEnter: (elements) => {
+                gsap.fromTo(elements, 
+                    { y: 100, opacity: 0 },
+                    { 
+                        y: 0, 
+                        opacity: 1, 
+                        duration: 1, 
+                        stagger: 0.2,
+                        ease: "power3.out"
+                    }
+                );
+            },
+            start: 'top 85%',
+            once: true
+        });
+
+        // ============================================
+        // WORKS SECTION - Simple fade in animation (no horizontal scroll)
+        // ============================================
+        ScrollTrigger.batch('.work-item', {
+            onEnter: (elements) => {
+                gsap.fromTo(elements, 
+                    { y: 50, opacity: 0 },
+                    { 
+                        y: 0, 
+                        opacity: 1, 
+                        duration: 0.8, 
+                        stagger: 0.15,
+                        ease: "power3.out"
+                    }
+                );
+            },
+            start: 'top 90%',
+            once: true
+        });
+
+        // ============================================
+        // SKILL PILLS ANIMATION - Using batch for reliability
+        // ============================================
+        ScrollTrigger.batch('.skill-pill', {
+            onEnter: (elements) => {
+                gsap.fromTo(elements, 
+                    { scale: 0, opacity: 0 },
+                    { 
+                        scale: 1, 
+                        opacity: 1, 
+                        duration: 0.5, 
+                        stagger: 0.05,
+                        ease: "back.out(1.7)"
+                    }
+                );
+            },
+            start: 'top 90%',
+            once: true
+        });
+
+        // ============================================
+        // MODAL
+        // ============================================
+        const modal = document.getElementById('modal');
+        const modalImg = document.getElementById('modalImg');
+
+        function openModal(src) {
+            modalImg.src = src;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelector('.modal-close').addEventListener('click', closeModal);
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // ============================================
+        // SMOOTH SCROLL FOR NAV LINKS
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    gsap.to(window, {
+                        duration: 1.5,
+                        scrollTo: target,
+                        ease: "power4.inOut"
+                    });
+                }
+            });
+        });
+
+        // ============================================
+        // PARALLAX EFFECTS
+        // ============================================
+        gsap.to('.hero-bg iframe', {
+            scale: 1.5,
+            opacity: 0.3,
+            scrollTrigger: {
+                trigger: '.hero',
+                start: 'top top',
+                end: 'bottom top',
+                scrub: 1
+            }
+        });
+
+        }); // End DOMContentLoaded
+
+        // ============================================
+        // GLOBAL FUNCTIONS (outside DOMContentLoaded)
+        // ============================================
+        function openModal(src) {
+            const modal = document.getElementById('modal');
+            const modalImg = document.getElementById('modalImg');
+            modalImg.src = src;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+</html>
