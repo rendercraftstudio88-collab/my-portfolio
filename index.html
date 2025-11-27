@@ -562,6 +562,306 @@
         }
 
         /* ============================================
+           VFX BREAKDOWN SECTION
+           ============================================ */
+        .vfx-breakdown {
+            padding: 15vh 5vw;
+            background: var(--black);
+        }
+
+        .breakdown-header {
+            text-align: center;
+            margin-bottom: 5vh;
+        }
+
+        .breakdown-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .breakdown-title span {
+            -webkit-text-stroke: 1.5px var(--white);
+            color: transparent;
+        }
+
+        .breakdown-subtitle {
+            font-size: 1rem;
+            color: var(--gray);
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .breakdown-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .breakdown-slider {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: ew-resize;
+            border: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .breakdown-slider:hover {
+            border-color: var(--accent);
+        }
+
+        .breakdown-before,
+        .breakdown-after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .breakdown-before img,
+        .breakdown-after img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .breakdown-after {
+            clip-path: inset(0 50% 0 0);
+        }
+
+        .breakdown-handle {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 4px;
+            height: 100%;
+            background: var(--accent);
+            transform: translateX(-50%);
+            z-index: 10;
+            cursor: ew-resize;
+        }
+
+        .breakdown-handle::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: var(--accent);
+            border-radius: 50%;
+        }
+
+        .breakdown-handle::after {
+            content: '⟷';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.5rem;
+            color: var(--black);
+            font-weight: bold;
+        }
+
+        .breakdown-label {
+            position: absolute;
+            bottom: 20px;
+            padding: 0.75rem 1.5rem;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            font-family: 'Syne', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .breakdown-label.before {
+            left: 20px;
+            color: var(--gray);
+        }
+
+        .breakdown-label.after {
+            right: 20px;
+            color: var(--accent);
+        }
+
+        .breakdown-layers {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1.5rem;
+            margin-top: 4rem;
+        }
+
+        .breakdown-layer {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.4s var(--transition);
+        }
+
+        .breakdown-layer:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+            background: rgba(255,77,0,0.05);
+        }
+
+        .layer-icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+
+        .layer-name {
+            font-family: 'Syne', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* ============================================
+           SHOWREEL SECTION
+           ============================================ */
+        .showreel {
+            padding: 15vh 5vw;
+            background: linear-gradient(180deg, var(--black) 0%, #111 50%, var(--black) 100%);
+        }
+
+        .showreel-header {
+            text-align: center;
+            margin-bottom: 5vh;
+        }
+
+        .showreel-title {
+            font-family: 'Syne', sans-serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1;
+        }
+
+        .showreel-title span {
+            -webkit-text-stroke: 1.5px var(--white);
+            color: transparent;
+        }
+
+        .showreel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .showreel-frame {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: #0f0f0f;
+        }
+
+        .showreel-frame:hover {
+            border-color: var(--accent);
+        }
+
+        .showreel-frame iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .showreel-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(255,77,0,0.1), rgba(0,0,0,0.5));
+            cursor: pointer;
+            transition: all 0.4s var(--transition);
+        }
+
+        .showreel-placeholder:hover {
+            background: linear-gradient(135deg, rgba(255,77,0,0.2), rgba(0,0,0,0.3));
+        }
+
+        .showreel-placeholder:hover .play-icon {
+            transform: scale(1.1);
+            background: var(--accent);
+        }
+
+        .play-icon {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            transition: all 0.4s var(--transition);
+        }
+
+        .play-icon i {
+            margin-left: 5px;
+        }
+
+        .showreel-text {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .showreel-subtext {
+            font-size: 1rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
+
+        .showreel-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            flex-wrap: wrap;
+        }
+
+        .showreel-stat {
+            text-align: center;
+        }
+
+        .showreel-stat-number {
+            font-family: 'Syne', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--accent);
+            line-height: 1;
+        }
+
+        .showreel-stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 0.5rem;
+        }
+
+        /* ============================================
            WORKS SECTION (GRID LAYOUT)
            ============================================ */
         .works {
@@ -1180,7 +1480,98 @@
                 </div>
             </section>
 
-            <!-- Works Section (Horizontal Scroll) -->
+            <!-- VFX Breakdown Section -->
+            <section class="vfx-breakdown" id="breakdown">
+                <div class="breakdown-header">
+                    <h2 class="breakdown-title">VFX <span>Breakdown</span></h2>
+                    <p class="breakdown-subtitle">Drag to compare before & after</p>
+                </div>
+                <div class="breakdown-container">
+                    <div class="breakdown-slider" id="breakdownSlider">
+                        <div class="breakdown-before">
+                            <img src="Gallery1.jpeg" alt="Raw Plate">
+                        </div>
+                        <div class="breakdown-after" id="breakdownAfter">
+                            <img src="Gallery2.jpeg" alt="Final Composite">
+                        </div>
+                        <div class="breakdown-handle" id="breakdownHandle"></div>
+                        <span class="breakdown-label before">Raw Plate</span>
+                        <span class="breakdown-label after">Final Composite</span>
+                    </div>
+                    <div class="breakdown-layers">
+                        <div class="breakdown-layer">
+                            <div class="layer-icon"><i class="fas fa-video"></i></div>
+                            <div class="layer-name">Plate</div>
+                        </div>
+                        <div class="breakdown-layer">
+                            <div class="layer-icon"><i class="fas fa-cut"></i></div>
+                            <div class="layer-name">Rotoscope</div>
+                        </div>
+                        <div class="breakdown-layer">
+                            <div class="layer-icon"><i class="fas fa-cube"></i></div>
+                            <div class="layer-name">CG Elements</div>
+                        </div>
+                        <div class="breakdown-layer">
+                            <div class="layer-icon"><i class="fas fa-lightbulb"></i></div>
+                            <div class="layer-name">Lighting</div>
+                        </div>
+                        <div class="breakdown-layer">
+                            <div class="layer-icon"><i class="fas fa-layer-group"></i></div>
+                            <div class="layer-name">Composite</div>
+                        </div>
+                        <div class="breakdown-layer">
+                            <div class="layer-icon"><i class="fas fa-palette"></i></div>
+                            <div class="layer-name">Color Grade</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Showreel Section -->
+            <section class="showreel" id="showreel">
+                <div class="showreel-header">
+                    <h2 class="showreel-title">VFX <span>Showreel</span></h2>
+                </div>
+                <div class="showreel-container">
+                    <div class="showreel-frame">
+                        <div class="showreel-placeholder" id="showreelPlaceholder">
+                            <div class="play-icon">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="showreel-text">VFX & 3D Showreel 2024</div>
+                            <div class="showreel-subtext">Click to Play</div>
+                        </div>
+                        <!-- Replace YOUR_VIDEO_ID with your actual YouTube video ID -->
+                        <iframe 
+                            id="showreelVideo"
+                            src="" 
+                            style="display: none;"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="showreel-stats">
+                        <div class="showreel-stat">
+                            <div class="showreel-stat-number">50+</div>
+                            <div class="showreel-stat-label">Projects</div>
+                        </div>
+                        <div class="showreel-stat">
+                            <div class="showreel-stat-number">3+</div>
+                            <div class="showreel-stat-label">Years Experience</div>
+                        </div>
+                        <div class="showreel-stat">
+                            <div class="showreel-stat-number">100%</div>
+                            <div class="showreel-stat-label">Satisfaction</div>
+                        </div>
+                        <div class="showreel-stat">
+                            <div class="showreel-stat-number">6</div>
+                            <div class="showreel-stat-label">Software Mastered</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Works Section (Grid Layout) -->
             <section class="works" id="works">
                 <div class="works-header">
                     <h2 class="works-title">Selected <span>Works</span></h2>
@@ -1612,6 +2003,73 @@
             modal.classList.remove('active');
             document.body.style.overflow = '';
         }
+
+        // ============================================
+        // VFX BREAKDOWN SLIDER
+        // ============================================
+        (function() {
+            const slider = document.getElementById('breakdownSlider');
+            const handle = document.getElementById('breakdownHandle');
+            const after = document.getElementById('breakdownAfter');
+
+            if (!slider || !handle || !after) return;
+
+            let isDragging = false;
+
+            function updateSlider(x) {
+                const rect = slider.getBoundingClientRect();
+                let percent = ((x - rect.left) / rect.width) * 100;
+                percent = Math.max(0, Math.min(100, percent));
+
+                after.style.clipPath = `inset(0 ${100 - percent}% 0 0)`;
+                handle.style.left = percent + '%';
+            }
+
+            slider.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                updateSlider(e.clientX);
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging) updateSlider(e.clientX);
+            });
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            // Touch support
+            slider.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                updateSlider(e.touches[0].clientX);
+            });
+
+            slider.addEventListener('touchmove', (e) => {
+                if (isDragging) updateSlider(e.touches[0].clientX);
+            });
+
+            slider.addEventListener('touchend', () => {
+                isDragging = false;
+            });
+        })();
+
+        // ============================================
+        // SHOWREEL VIDEO PLAYER
+        // ============================================
+        (function() {
+            const placeholder = document.getElementById('showreelPlaceholder');
+            const video = document.getElementById('showreelVideo');
+
+            if (!placeholder || !video) return;
+
+            placeholder.addEventListener('click', () => {
+                // Replace with your actual YouTube video ID
+                const videoId = 'YOUR_VIDEO_ID';
+                video.src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                placeholder.style.display = 'none';
+                video.style.display = 'block';
+            });
+        })();
     </script>
 </body>
 </html>
